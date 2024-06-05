@@ -508,6 +508,444 @@ var canCompleteCircuit = function(gas, cost) {
 
 
 
+//135. Candy
+
+/*
+There are N children standing in a line. Each child is assigned a rating value.
+
+You are giving candies to these children subjected to the following requirements:
+
+Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+What is the minimum candies you must give?
+
+
+Example 1:
+
+Input: [1,0,2]
+Output: 5
+Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
+
+*/
 
 
 
+var candy = function(ratings) {
+    let result = new Array(ratings.length).fill(1)
+    for(let i = 1; i < ratings.length; i++){
+        if(ratings[i] > ratings[i - 1]){
+            result[i] = result[i - 1] + 1
+        }
+    }
+    for(let i = ratings.length - 1; i > 0; i--){
+        if(ratings[i - 1] > ratings[i]){
+            result[i - 1] = Math.max(result[i - 1], result[i] + 1)
+        }
+    }
+    return result.reduce((a, b) => a + b)
+};
+
+
+//42. Trapping Rain Water
+
+/*
+Given n non-negative integers representing an elevation map where the width of each bar is 1,
+compute how much water it is able to trap after raining.
+
+Example:
+
+Input: [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+
+*/
+
+
+var trap = function(height) {
+    let result = 0
+    let left = 0
+    let right = height.length - 1
+    let leftMax = 0
+    let rightMax = 0
+    while(left < right){
+        if(height[left] < height[right]){
+            if(height[left] >= leftMax){
+                leftMax = height[left]
+            }else{
+                result += leftMax - height[left]
+            }
+            left++
+        }else{
+            if(height[right] >= rightMax){
+                rightMax = height[right]
+            }else{
+
+                result += rightMax - height[right]
+            }
+            right--
+        }
+    }
+    return result
+};
+
+//13. Roman to Integer
+
+/*
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+
+
+Example 1:
+
+Input: "III"
+Output: 3
+
+Example 2:
+
+Input: "IV"
+Output: 4
+
+*/
+
+
+
+Symbols = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000
+};
+var romanToInt = function(s) {
+    value = 0;
+    for (let i = 0; i < s.length; i+=1 ){
+        Symbols[s[i]] < Symbols[s[i+1]] ? value -= Symbols[s[i]]: value += Symbols[s[i]]
+    }
+    return value
+
+    
+};
+
+
+//12. Integer to Roman 
+
+/*
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+
+Example 1:
+
+Input: 3
+Output: "III"
+
+*/
+
+var intToRoman = function(num) {
+    let result = ""
+    while(num > 0){
+        if(num >= 1000){
+            num -= 1000
+            result += "M"
+        }else if(num >= 900){
+            num -= 900
+            result += "CM"
+        }else if(num >= 500){
+            num -= 500
+            result += "D"
+        }else if(num >= 400){
+            num -= 400
+            result += "CD"
+        }else if(num >= 100){
+            num -= 100
+            result += "C"
+        }else if(num >= 90){
+            num -= 90
+            result += "XC"
+        }else if(num >= 50){
+            num -= 50
+            result += "L"
+        }else if(num >= 40){
+            num -= 40
+            result += "XL"
+        }else if(num >= 10){
+            num -= 10
+            result += "X"
+        }else if(num >= 9){
+            num -= 9
+            result += "IX"
+        }else if(num >= 5){
+            num -= 5
+            result += "V"
+        }else if(num >= 4){
+            num -= 4
+            result += "IV"
+        }else if(num >= 1){
+            num -= 1
+            result += "I"
+        }
+    }
+    return result
+    
+}
+
+
+//58. Length of Last Word
+
+/*
+Given a string s consists of upper/lower-case alphabets and empty space characters ' ', 
+return the length of last word in the string.
+
+If the last word does not exist, return 0.
+
+Note: A word is defined as a character sequence consists of non-space characters only.
+
+Example:
+
+Input: "Hello World"
+Output: 5
+
+*/
+
+
+var lengthOfLastWord = function(s) {
+    return s.trim().split(" ").pop().length
+}
+
+
+//14. Longest Common Prefix
+
+/*
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
+
+Example 1:
+
+Input: ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+Note:
+All given inputs are in lowercase letters a-z.
+
+*/
+
+
+var longestCommonPrefix = function(strs) {
+    let result = ""
+    for(let i = 0; i < strs[0].length; i++){
+        for(let j = 0; j < strs.length; j++){
+            if(strs[0][i] !== strs[j][i]){
+                return result
+            }
+        }
+        result += strs[0][i]
+    }
+    return result
+}
+
+//151. Reverse Words in a String
+
+/*
+Given an input string, reverse the string word by word.
+
+Example 1:
+
+Input: "the sky is blue"
+Output: "blue is sky the"
+
+*/
+
+var reverseWords = function(s) {
+    return s.trim().split(" ").reverse().join(" ")
+}
+
+//6. Zigzag Conversion
+
+/*
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string text, int nRows);
+
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+
+*/
+
+var convert = function(s, numRows) {
+    if(numRows === 1){
+        return s
+    }
+    let result = new Array(numRows).fill("")
+    let index = 0
+    let step = 1
+    for(let i = 0; i < s.length; i++){
+        result[index] += s[i]
+        if(index === 0){
+            step = 1
+        }else if(index === numRows - 1){
+            step = -1
+        }
+        index += step
+    }
+    return result.join("")
+}
+
+
+
+//28. Find the Index of the First Occurrence in a String
+
+/*
+Given a haystack and a needle, return the index of the first occurrence of needle in haystack,
+ or -1 if needle is not part of haystack.
+
+Example 1:
+
+Input: haystack = "hello", needle = "ll"
+Output: 2
+Example 2:
+
+Input: haystack = "aaaaa", needle = "bba"
+Output: -1
+*/
+
+var strStr = function(haystack, needle) {
+    if(needle === ""){
+        return 0
+    }
+    for(let i = 0; i < haystack.length; i++){
+        if(haystack.slice(i, i + needle.length) === needle){
+            return i
+
+        }
+
+    }
+    return -1
+}
+
+//68. Text Justification
+
+/*
+You are given an array of words and a width maxWidth,
+ format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach;
+
+that is, pack as many words as you can in each line. 
+Pad extra spaces ' ' when necessary so that each line has exactly maxWidth characters.
+
+
+
+Extra spaces between words should be distributed as evenly as possible.
+
+If the number of spaces on a line do not divide evenly between words,
+ the empty slots on the left will be assigned more spaces than the slots on the right.
+
+
+
+For the last line of text, it should be left justified and no extra space is inserted between words.
+
+Note:
+
+
+
+A word is defined as a character sequence consisting of non-space characters only.
+
+Each word's length is guaranteed to be greater than 0 and not exceed maxWidth.
+
+Words will be separated by the ' ' character.
+
+Example 1:
+
+Input:
+words = ["This", "is", "an", "example", "of", "text", "justification."]
+maxWidth = 16
+Output:
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+Example 2:
+
+Input:
+words = ["What","must","be","acknowledgment","shall","be"]
+maxWidth = 16
+Output:
+[
+  "What   must   be",
+  "acknow   
+  ledgment  shall
+  be        "
+]
+
+
+*/
+
+
+
+var fullJustify = function(words, maxWidth) { 
+    let result = []
+    let line = []
+    let count = 0
+    for(let i = 0; i < words.length; i++){
+        if(line.length === 0){
+            line.push(words[i])
+            count += words[i].length
+        }else if(count + words[i].length + line.length - 1 < maxWidth){
+            line.push(words[i])
+            count += words[i].length
+        }else{
+            let space = maxWidth - count
+            let avg = space / (line.length - 1)
+            let mod = space % (line.length - 1)
+            let temp = []
+            for(let j = 0; j < line.length - 1; j++){
+                temp.push(line[j])
+                for(let k = 0; k < avg; k++){
+                    temp.push(" ")
+                }
+                if(mod > 0){
+                    temp.push(" ")
+                    mod--
+                }
+            }
+            temp.push(line[line.length - 1])
+            result.push(temp.join(""))
+            line = []
+            line.push(words[i])
+            count = words[i].length
+        }
+    }
+    if(line.length > 0){
+        let space = maxWidth - count
+        let avg = space / (line.length - 1)
+        let mod = space % (line.length - 1)
+        let temp = []
+        for(let j = 0; j < line.length - 1; j++){   
+            temp.push(line[j])
+            for(let k = 0; k < avg; k++){
+                temp.push(" ")
+            }
+            if(mod > 0){
+                temp.push(" ")
+                mod--
+            }
+        }
+        temp.push(line[line.length - 1])
+        result.push(temp.join(""))
+    }
+    return result
+}
