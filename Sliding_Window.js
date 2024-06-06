@@ -72,3 +72,107 @@ var lengthOfLongestSubstring = function(s) {
     return max
 }
 
+//30. Substring with Concatenation of All Words
+
+/*
+Given a string s and a list of words words, where each word is the same length, 
+find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once.
+
+Example 1:
+
+Input:
+s = "barfoothefoobarman",
+words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+The output order does not matter.
+*/
+
+var findSubstring = function(s, words) {
+    let left = 0
+    let right = 0
+    let count = words.length
+    let len = words[0].length
+    let map = new Map()
+    for(let word of words){
+        if(!map.has(word)){
+            map.set(word, 0)
+        }
+        map.set(word, map.get(word) + 1)
+    }
+    let res = []
+    while(right < s.length){
+        if(map.has(s[right])){
+            map.set(s[right], map.get(s[right]) - 1)
+            if(map.get(s[right]) === 0){
+                count--
+            }
+        }
+        right++
+        while(count === 0){
+            if(map.has(s[left])){
+                map.set(s[left], map.get(s[left]) + 1)
+                if(map.get(s[left]) > 0){
+                    count++
+                }
+            }
+            if(right - left === words.length * len){
+                res.push(left)
+            }
+            left++
+        }
+    }
+    return res
+    
+}
+
+
+//76. Minimum Window Substring
+
+/*
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+Example:
+
+Input: S = "ADOBECODEBANC", T = "ABC"
+Output: "BANC"
+*/
+
+var minWindow = function(s, t) {
+    if (!s || !t) return "";
+    let left = 0;
+    let right = 0;
+    let min = Infinity;
+    let minLeft = 0;
+    let map = {};
+    let count = 0;
+    for (let i = 0; i < t.length; i++) {
+        if (!map[t[i]]) {
+            map[t[i]] = 0;
+        }
+        map[t[i]]++;
+    }
+    while (right < s.length) {
+        if (map[s[right]]) {
+            map[s[right]]--;
+            if (map[s[right]] >= 0) {
+                count++;
+            }
+        }
+        right++;
+        while (count === t.length) {
+            if (right - left < min) {
+                min = right - left;
+                minLeft = left;
+            }
+            if (map[s[left]]) {
+                map[s[left]]++;
+                if (map[s[left]] > 0) {
+                    count--;
+                }
+            }
+            left++;
+        }
+    }
+    
+}
