@@ -128,4 +128,123 @@ var addTwoNumbers = function (l1, l2) {
 }
 
 
+//21. Merge Two Sorted Lists 
+
+/*
+Merge two sorted linked lists and return it as a new list.
+ The new list should be made by splicing together the nodes of the first two lists.
+
+Example:
+
+Input: 1->2->4, 1->3->4
+Output: 1->1->2->3->4->4
+*/
+
+
+var mergeTwoLists = function (l1, l2) {
+    let dummy = new ListNode(0)
+    let cur = dummy
+    while (l1 && l2) {
+        if (l1.val < l2.val) {
+            cur.next = l1
+            l1 = l1.next
+        } else {
+            cur.next = l2
+            l2 = l2.next
+        }
+        cur = cur.next
+    }
+    cur.next = l1 || l2
+    return dummy.next
+}
+
+//138. Copy List with Random Pointer
+
+/*
+A linked list is given such that each node contains an additional random pointer
+which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+Example 1:
+
+Input:
+
+{"$id":"1","next":{"$id":"2","next":null,"random":{"$ref":"2"},"val":2},"random":{"$ref":"2"},"val":1}
+
+
+Explanation:
+
+We have two nodes [1, 2] with random pointers to nodes [2, 2] and [2, 2].
+The copy should have pointers to the nodes [1, 1] and [2, 2].
+
+
+
+*/
+
+var copyRandomList = function (head) {
+    if (!head) return null
+    let cur = head
+    while (cur) {
+        let copy = new Node(cur.val)
+        copy.next = cur.next
+        cur.next = copy
+        cur = copy.next
+    }
+    cur = head
+    while (cur) {
+        if (cur.random) cur.next.random = cur.random.next
+        cur = cur.next.next
+    }
+    let dummy = new Node(0)
+    let cur1 = head
+    let cur2 = dummy
+    while (cur1) {
+        cur2.next = cur1.next
+        cur1.next = cur1.next.next
+        cur1 = cur1.next
+        cur2 = cur2.next
+    }
+    return dummy.next
+}
+
+//92. Reverse Linked List II
+
+/*
+Reverse a linked list from position m to n. Do it in one-pass.
+
+Note: 1 ≤ m ≤ n ≤ length of list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL, m = 2, n = 4
+Output: 1->4->3->2->5->NULL
+*/
+
+
+var reverseBetween = function (head, m, n) {
+    let dummy = new ListNode(0)
+    dummy.next = head
+    let pre = dummy
+    for (let i = 0; i < m - 1; i++) pre = pre.next
+    let cur = pre.next
+    for (let i = 0; i < n - m; i++) {
+        let tmp = cur.next
+        cur.next = tmp.next
+        tmp.next = pre.next
+        pre.next = tmp
+    }
+    return dummy.next
+}
+
+
+
+
+
+
+
+
+
+
+
 
