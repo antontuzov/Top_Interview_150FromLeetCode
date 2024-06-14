@@ -237,6 +237,286 @@ var reverseBetween = function (head, m, n) {
     return dummy.next
 }
 
+//25. Reverse Nodes in k-Group
+
+/*
+Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+k is a positive integer and is less than or equal to the length of the linked list.
+ If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+
+Example:
+
+Given this linked list: 1->2->3->4->5
+
+For k = 2, you should return: 2->1->4->3->5
+
+For k = 3, you should return: 3->2->1->4->5
+
+Note:
+
+Only constant extra memory is allowed.
+You may not alter the values in the list's nodes, only nodes itself may be changed.
+
+
+
+*/
+
+ var reverseKGroup = function(head, k) {
+
+    var dummy = new ListNode(0)
+    dummy.next = head
+    var pre = dummy
+    while (head) {
+        var tail = head
+        for (let i = 0; i < k; i++) {
+            tail = tail.next
+            if (!tail) {
+                return dummy.next
+            }
+        }
+        var next = tail.next
+        [head, tail] = reverse(head, tail)
+        pre.next = head
+        tail.next = next
+        pre = tail
+        head = tail.next
+    }
+    return dummy.next
+
+    function reverse(head, tail) {
+        var prev = tail.next
+        var p = head
+        while (head !== tail) {
+            var next = head.next
+            head.next = prev
+            prev = head
+            head = next
+        }
+        return [prev, p]
+    }
+
+
+   
+}
+
+//19. Remove Nth Node From End of List
+
+/*
+Given a linked list, remove the n-th node from the end of list and return its head.
+
+Example:
+Given linked list: 1->2->3->4->5, and n = 2.
+After removing the second node from the end, the linked list becomes 1->2->3->5.
+
+*/
+
+var removeNthFromEnd = function(head, n) {
+    let dummy = new ListNode(0)
+    dummy.next = head
+    let fast = head
+    let slow = dummy
+    for (let i = 0; i < n; i++) fast = fast.next
+    while (fast) {
+        fast = fast.next
+        slow = slow.next
+    }
+    slow.next = slow.next.next
+    return dummy.next
+}
+
+
+//82. Remove Duplicates from Sorted List II
+
+/*
+Given a sorted linked list, delete all nodes that have duplicate numbers,
+ leaving only distinct numbers from the original list.
+
+Example 1:
+
+Input: 1->2->3->3->4->4->5
+Output: 1->2->5
+Example 2:
+
+Input: 1->1->1->2->3
+Output: 2->3
+*/
+
+var deleteDuplicates = function(head) {
+    let dummy = new ListNode(0)
+    dummy.next = head
+    let pre = dummy
+    while (head) {
+        while (head.next && head.val === head.next.val) head = head.next
+        if (pre.next === head) pre = pre.next
+        else pre.next = head.next
+        head = head.next
+    }
+
+
+    return dummy.next
+
+}
+
+//61. Rotate List
+
+/*
+Given the head of a linked list, rotate the list to the right by k places.
+
+Example 1:
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+
+*/
+
+
+var rotateRight = function(head, k) {
+    if (!head) return null
+    let len = 1
+    let tail = head
+    while (tail.next) {
+        tail = tail.next
+        len++
+    }
+    k = k % len
+    if (k === 0) return head
+    let newTail = head
+    for (let i = 0; i < len - k - 1; i++) newTail = newTail.next
+    let newHead = newTail.next
+    newTail.next = null
+    tail.next = head
+    return newHead
+}
+
+//86. Partition List
+
+/*
+Given a linked list and a value x, partition it such that all nodes less than x
+come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+Example:
+
+Input: head = 1->4->3->2->5->2, x = 3
+Output: 1->2->2->4->3->5
+*/
+
+
+var partition = function(head, x) {
+    let dummy1 = new ListNode(0)
+    let dummy2 = new ListNode(0)
+    let cur1 = dummy1
+    let cur2 = dummy2
+    while (head) {
+        if (head.val < x) {
+            cur1.next = head
+            cur1 = cur1.next
+        } else {
+            cur2.next = head
+            cur2 = cur2.next
+        }
+        head = head.next
+    }
+    cur1.next = dummy2.next
+    cur2.next = null
+    return dummy1.next
+}
+
+
+//146. LRU Cache
+
+
+/*
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+
+Example:    
+
+Input
+
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+
+
+Output
+
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+
+*/
+
+var LRUCache = function(capacity) {
+
+    this.capacity = capacity
+    this.map = new Map()
+    this.head = new Node(0, 0)
+    this.tail = new Node(0, 0)
+    this.head.next = this.tail
+    this.tail.pre = this.head
+
+
+    this.addToHead = function(node) {
+        node.next = this.head.next
+        node.pre = this.head
+        this.head.next.pre = node
+        this.head.next = node
+    }
+   
+
+
+}
+
+
+LRUCache.prototype.get = function(key) {
+    if (this.map.has(key)) {
+        let node = this.map.get(key)
+        this.moveToHead(node)
+        return node.val
+    }
+    return -1
+}
+
+LRUCache.prototype.put = function(key, value) {
+    if (this.map.has(key)) {
+        let node = this.map.get(key)
+        node.val = value
+        this.moveToHead(node)
+    } else {
+        let node = new Node(key, value)
+        this.map.set(key, node)
+        this.addToHead(node)
+        if (this.map.size > this.capacity) {
+            let node = this.removeTail()
+            this.map.delete(node.key)
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
