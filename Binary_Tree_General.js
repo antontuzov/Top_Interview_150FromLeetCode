@@ -249,6 +249,189 @@ var hasPathSum = function (root, targetSum) {
 
 
 
+//129. Sum Root to Leaf Numbers
+
+/*
+Given the root of a binary tree containing digits from 0 to 9 only, each root-to-leaf path could represent a number.
+
+An example is the root-to-leaf path 1 -> 2 -> 3 which represents the number 123.
+
+Return the total sum of all root-to-leaf numbers. Test cases are generated so that the answer will fit in a 32-bit integer.
+
+
+Example 1:
+
+Input: root = [1,2,3]
+Output: 25
+Explanation:
+The root-to-leaf path 1->2 represents the number 12.
+The root-to-leaf path 1->3 represents the number 13.
+Therefore, sum = 12 + 13 = 25.
+*/
+
+var sumNumbers = function (root) {
+    if (!root) return 0
+    let sum = 0
+    let stack = [[root, 0]]
+    while (stack.length) {
+        let [node, num] = stack.pop()
+        num = num * 10 + node.val
+        if (!node.left && !node.right) sum += num
+        if (node.left) stack.push([node.left, num])
+        if (node.right) stack.push([node.right, num])
+    }
+    return sum
+}
+
+//124. Binary Tree Maximum Path Sum
+
+/*
+Given a non-empty binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node
+in the tree along the parent-child connections. The path must contain at least one node and does not need to
+go through the root.
+
+
+Example 1:
+
+Input: root = [1,2,3]
+Output: 6
+Explanation: The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.
+
+*/
+
+var maxPathSum = function (root) {
+
+   let max = -Infinity
+    const dfs = (node) => {
+        if (!node) return 0
+        let left = Math.max(dfs(node.left), 0)
+        let right = Math.max(dfs(node.right), 0)
+        max = Math.max(max, left + right + node.val)
+        return node.val + Math.max(left, right)
+    }
+    dfs(root)
+    return max
+
+}
+
+//173. Binary Search Tree Iterator
+
+/*
+Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+
+Calling next() will return the next smallest number in the BST.
+
+Example 1:
+
+Input
+["BSTIterator", "next", "next", "hasNext", "next", "hasNext", "next", "hasNext", "next", "next"]
+[[[7, 3, 15, null, null, 9, 20]], [], [], [], [], [], [], [], [], []]
+Output
+[null, 3, 7, true, 9, true, 15, true, 20, 20]
+
+Explanation
+BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]);
+bSTIterator.next();    // return 3  
+bSTIterator.next();    // return 7
+
+
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 9
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 15
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 20
+bSTIterator.hasNext(); // return False
+
+
+Note:
+
+- next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+- You may assume that next() call will always be valid, that is, there will be at least a next smallest number in the BST.
+
+
+*/
+
+var BSTIterator = function (root) {
+    this.stack = []
+    this.leftMost = (node) => {
+        while (node) {
+            this.stack.push(node)
+            node = node.left
+        }
+    }
+    this.leftMost(root)
+};
+
+
+BSTIterator.prototype.next = function () {
+    let node = this.stack.pop()
+    if (node.right) this.leftMost(node.right)
+    return node.val
+};
+
+
+BSTIterator.prototype.hasNext = function () {
+    return this.stack.length
+};
+
+
+
+
+
+//222. Count Complete Tree Nodes
+
+/*
+Given the root of a complete binary tree, return the number of the nodes in the tree.
+
+According to Wikipedia, every valid binary tree is a complete binary tree
+(i.e., every level, except possibly the last, is completely filled,
+ and all nodes in the last level are as far left as possible.
+ It can have between 1 and 2h nodes inclusive at the last level h.
+
+Example 1:
+
+Input: root = [1,2,3,4,5,6]
+Output: 6
+
+*/
+
+var countNodes = function (root) {
+    if (!root) return 0
+    let left = countNodes(root.left)
+    let right = countNodes(root.right)
+    return 1 + left + right
+}
+
+//236. Lowest Common Ancestor of a Binary Tree
+
+/*
+Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+
+According to the definition of LCA on Wikipedia: "The lowest common ancestor is defined between
+two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself)."
+
+Example 1:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+
+*/
+
+var lowestCommonAncestor = function (root, p, q) {
+
+    if (p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left, p, q)
+
+    return root
+}
+
+
+
+
+
 
 
 
